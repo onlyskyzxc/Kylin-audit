@@ -30,4 +30,4 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: kylin_audit-windows-x64
-          path: dist/kylin_audit02.exe
+          path: dist/kylin-audit02.exe
