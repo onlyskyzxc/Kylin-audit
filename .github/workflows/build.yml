@@ -3,31 +3,19 @@ name: Build Windows EXE
 on:
   push:
     tags:
-      - 'v*'            # 当推送以 'v' 开头的标签时触发，例如 v1.0, v2.3.1
+      - 'v*'
 
 jobs:
   build:
-    runs-on: windows-latest   # 使用 Windows 环境（x86_64）
+    runs-on: windows-latest
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Set up Python
-        uses: actions/setup-python@v5
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
-
-      - name: Install dependencies
-        run: |
-          python -m pip install --upgrade pip
-          pip install paramiko jinja2 pyinstaller
-
-      - name: Build EXE with PyInstaller
-        run: |
-          pyinstaller --onefile --console --name kylin_audit audit_kylin.py
-
-      - name: Upload artifact (EXE file)
-        uses: actions/upload-artifact@v4
+      - run: pip install paramiko jinja2 pyinstaller
+      - run: pyinstaller --onefile --console --name kylin_audit kylin-audit02.py
+      - uses: actions/upload-artifact@v4
         with:
-          name: kylin_audit-windows-x64
-          path: dist/kylin-audit02.exe
+          name: kylin_audit
+          path: dist/kylin_audit.exe
