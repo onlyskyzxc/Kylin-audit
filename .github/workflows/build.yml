@@ -1,7 +1,21 @@
-name: Test Workflow
-on: [push]
+name: Build Windows EXE
+
+on:
+  push:
+    tags:
+      - 'v*'
+
 jobs:
-  test:
-    runs-on: ubuntu-latest
+  build:
+    runs-on: windows-latest
     steps:
-      - run: echo "Hello World"
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: pip install paramiko jinja2 pyinstaller
+      - run: pyinstaller --onefile --console --name kylin_audit kylin-audit02.py
+      - uses: actions/upload-artifact@v4
+        with:
+          name: kylin_audit
+          path: dist/kylin_audit.exe
